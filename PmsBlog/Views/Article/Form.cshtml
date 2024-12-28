@@ -1,0 +1,20 @@
+﻿@using PmsBlog.Models.Article
+@model ArticleFormViewModel
+
+<form id="articleForm" asp-controller="Article" asp-action="Save" method="post">
+    <h2>Create a new article.</h2>
+    <hr />
+    <input asp-for="@Model.Id" type="hidden" />
+    <div class="form-floating mb-3">
+        <input asp-for="@Model.Title" class="form-control" aria-required="true" placeholder="Your article title" />
+        <label asp-for="@Model.Title">Title</label>
+        <span asp-validation-for="@Model.Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="@Model.Content" class="form-control" aria-required="true" placeholder="Your article content" />
+        <label asp-for="@Model.Content">Content</label>
+        <span asp-validation-for="@Model.Content" class="text-danger"></span>
+    </div>
+    <button id="articleSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+</form>

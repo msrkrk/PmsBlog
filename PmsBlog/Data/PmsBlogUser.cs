@@ -10,6 +10,6 @@ namespace PmsBlog.Data;
 // Add profile data for application users by adding properties to the PmsBlogUser class
 public class PmsBlogUser : IdentityUser
 {
-    public List<UserTopic>? UserTopics { get; set; }
+    public List<UserTopic> UserTopics { get; set; }
 }
 

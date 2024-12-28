@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+using NuGet.Protocol.Core.Types;
 
 namespace PmsBlog.Data
 {
@@ -8,9 +9,12 @@ namespace PmsBlog.Data
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string Title { get; set; }
         public string Content { get; set; }
-        public double AvgReadingTime { get; set; }
+        public int AvgReadingMins { get; set; }
         public int ReadingCount { get; set; }
-        public List<ArticleTopic>? ArticleTopics { get; set; }
+        public List<ArticleTopic> ArticleTopics { get; set; }
+
+        public string AuthorId { get; set; }
+        public PmsBlogUser Author { get; set; }
 
     }
 }
