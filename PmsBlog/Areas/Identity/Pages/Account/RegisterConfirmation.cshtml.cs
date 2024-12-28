@@ -3,6 +3,8 @@
 #nullable disable
 
 using System;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +47,29 @@ namespace PmsBlog.Areas.Identity.Pages.Account
         /// </summary>
         public string EmailConfirmationUrl { get; set; }
 
+        public async Task SendEmailAsync(string content, string receiver)
+        {
+            string sender = "misra.kirik@gmail.com";
+
+            MailMessage message = new MailMessage();
+            SmtpClient smtp = new SmtpClient();
+
+
+
+            message.From = new MailAddress(sender);
+            message.To.Add(new MailAddress(receiver));
+            message.Subject = "Kayıt Onaylama Maili";
+
+            message.Body = content;
+            smtp.Port = 587;
+            smtp.Host = "smtp.gmail.com";
+            smtp.EnableSsl = true;
+            //smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(sender, "fhjn svxj xppv ruxl");
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.Send(message);
+        }
+
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
             if (email == null)
@@ -72,6 +97,9 @@ namespace PmsBlog.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
+
+                await SendEmailAsync(EmailConfirmationUrl, user.Email);
+
             }
 
             return Page();

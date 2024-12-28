@@ -7,7 +7,7 @@ var connectionString = builder.Configuration.GetConnectionString("PmsBlogContext
 
 builder.Services.AddDbContext<PmsBlogContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<PmsBlogUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PmsBlogContext>();
+builder.Services.AddDefaultIdentity<PmsBlogUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<PmsBlogContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -4,8 +4,10 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,6 +19,7 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<PmsBlogUser> _userManager;
         private readonly SignInManager<PmsBlogUser> _signInManager;
+       
 
         public IndexModel(
             UserManager<PmsBlogUser> userManager,
@@ -59,18 +62,29 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Fullname")]
+            public string FullName { get; set; }
+
+            [Display(Name = "Description")]
+            public string Description { get; set; }
         }
 
         private async Task LoadAsync(PmsBlogUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var claims = await _userManager.GetClaimsAsync(user);
+            var fullName = claims.FirstOrDefault(x=> x.Type == "FullName")?.Value;
+            var description = claims.FirstOrDefault(x => x.Type == "Description")?.Value;
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FullName = fullName,
+                Description = description
             };
         }
 
@@ -110,6 +124,46 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            var claims = await _userManager.GetClaimsAsync(user);
+            var fullNameClaim = claims.FirstOrDefault(x => x.Type == "FullName");
+            var fullName = fullNameClaim?.Value;
+            if (Input.FullName != fullName)
+            {
+                if(fullNameClaim is not null)
+                {
+                    await _userManager.RemoveClaimAsync(user, fullNameClaim);
+                }
+               
+                var setFullNameResult = await _userManager.AddClaimAsync(user, new Claim("FullName",Input.FullName));
+
+                if (!setFullNameResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set fullname.";
+                    return RedirectToPage();
+                }
+            }
+
+            var descriptionClaim = claims.FirstOrDefault(x => x.Type == "Description");
+            var description = descriptionClaim?.Value;
+            if (Input.Description != description)
+            {
+                if(descriptionClaim != null)
+                {
+                    await _userManager.RemoveClaimAsync(user, descriptionClaim);
+                }
+                var setDescriptionResult = await _userManager.AddClaimAsync(user, new Claim("Description", Input.Description));
+
+                if (!setDescriptionResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set description.";
+                    return RedirectToPage();
+                }
+            }
+
+
+
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PmsBlog.Data;
 
@@ -11,9 +12,11 @@ using PmsBlog.Data;
 namespace PmsBlog.Migrations
 {
     [DbContext(typeof(PmsBlogContext))]
-    partial class PmsBlogContextModelSnapshot : ModelSnapshot
+    [Migration("20241228085021_RemoveNameSurname")]
+    partial class RemoveNameSurname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

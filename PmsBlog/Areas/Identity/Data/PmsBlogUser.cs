@@ -10,7 +10,6 @@ namespace PmsBlog.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the PmsBlogUser class
 public class PmsBlogUser : IdentityUser
 {
-    public string Name { get; set; }
-    public string Surname{ get; set; }
+
 }
 
