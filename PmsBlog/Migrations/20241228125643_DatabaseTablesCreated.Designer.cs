@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PmsBlog.Data;
 
@@ -11,9 +12,11 @@ using PmsBlog.Data;
 namespace PmsBlog.Migrations
 {
     [DbContext(typeof(PmsBlogContext))]
-    partial class PmsBlogContextModelSnapshot : ModelSnapshot
+    [Migration("20241228125643_DatabaseTablesCreated")]
+    partial class DatabaseTablesCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,12 +177,12 @@ namespace PmsBlog.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ReadingCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("readingCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

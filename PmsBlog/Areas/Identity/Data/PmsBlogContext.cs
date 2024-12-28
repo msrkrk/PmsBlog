@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PmsBlog.Areas.Blog.Data;
 using PmsBlog.Areas.Identity.Data;
 
 namespace PmsBlog.Data;
 
 public class PmsBlogContext : IdentityDbContext<PmsBlogUser>
 {
+    public DbSet<Article> Articles { get; set; }
+    public DbSet<Topic> Topics { get; set; }
+    public DbSet<ArticleTopic> ArticleTopics { get; set; }
+    public DbSet<UserTopic> UserTopics { get; set; }
     public PmsBlogContext(DbContextOptions<PmsBlogContext> options)
         : base(options)
     {
