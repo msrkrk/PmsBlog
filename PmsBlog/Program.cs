@@ -1,4 +1,13 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("PmsBlogContextConnection") ?? throw new InvalidOperationException("Connection string 'PmsBlogContextConnection' not found.");
+
+builder.Services.AddDbContext<PmsBlogContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<PmsBlogUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PmsBlogContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -24,4 +33,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapRazorPages(); // ıdentity sayfalarını kullanabilmek için ekledik.
 app.Run();
