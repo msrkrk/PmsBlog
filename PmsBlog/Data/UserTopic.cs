@@ -1,10 +1,8 @@
-﻿using PmsBlog.Areas.Identity.Data;
-
-namespace PmsBlog.Areas.Blog.Data
+﻿namespace PmsBlog.Data
 {
     public class UserTopic
     {
-        public string Id { get; set; } = System.Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public PmsBlogUser PmsBlogUser { get; set; }
         public string PmsBlogUserId { get; set; }
 

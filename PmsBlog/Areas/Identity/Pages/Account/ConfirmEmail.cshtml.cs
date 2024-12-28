@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account
 {
@@ -50,7 +50,9 @@ namespace PmsBlog.Areas.Identity.Pages.Account
             /// claim kullanarak fullname ekledik.
             if (result.Succeeded)
             {
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", user.Email.Split("@").First()));
+                var eMail = user.Email.Split("@").First();
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", eMail));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Url", eMail));
             }
 
             return Page();

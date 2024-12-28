@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PmsBlog.Areas.Identity.Data;
 using PmsBlog.Data;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PmsBlogContextConnection") ?? throw new InvalidOperationException("Connection string 'PmsBlogContextConnection' not found.");

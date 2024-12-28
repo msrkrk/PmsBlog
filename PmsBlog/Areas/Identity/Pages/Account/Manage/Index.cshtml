@@ -26,6 +26,11 @@
                 <label asp-for="Input.FullName" class="form-label"></label>
                 <span asp-validation-for="Input.FullName" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Url" class="form-control" placeholder="Please enter your fullname." />
+                <label asp-for="Input.Url" class="form-label"></label>
+                <span asp-validation-for="Input.Url" class="text-danger"></span>
+            </div>
 
             <div class="form-floating mb-3">
                 <textarea asp-for="Input.Description" class="form-control" placeholder="Please enter your description." style="min-height: 150px"></textarea>

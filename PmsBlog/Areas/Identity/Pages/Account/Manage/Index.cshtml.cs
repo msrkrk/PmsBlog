@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account.Manage
 {
@@ -68,6 +68,10 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Description")]
             public string Description { get; set; }
+
+            [Display(Name = "URL")]
+            public string Url { get; set; }
+
         }
 
         private async Task LoadAsync(PmsBlogUser user)
@@ -77,6 +81,7 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
             var claims = await _userManager.GetClaimsAsync(user);
             var fullName = claims.FirstOrDefault(x=> x.Type == "FullName")?.Value;
             var description = claims.FirstOrDefault(x => x.Type == "Description")?.Value;
+            var url = claims.FirstOrDefault(x => x.Type == "Url")?.Value;
 
             Username = userName;
 
@@ -84,7 +89,8 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 FullName = fullName,
-                Description = description
+                Description = description,
+                Url = url
             };
         }
 
@@ -161,7 +167,24 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            
+            var urlClaim = claims.FirstOrDefault(x => x.Type == "Url");
+            var url = urlClaim?.Value;
+            if (Input.Url != url)
+            {
+                if (urlClaim is not null)
+                {
+                    await _userManager.RemoveClaimAsync(user, urlClaim);
+                }
 
+                var setUrlResult = await _userManager.AddClaimAsync(user, new Claim("Url", Input.Url));
+
+                if (!setUrlResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set URL.";
+                    return RedirectToPage();
+                }
+            }
 
 
 

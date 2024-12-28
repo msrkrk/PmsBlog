@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account.Manage
 {

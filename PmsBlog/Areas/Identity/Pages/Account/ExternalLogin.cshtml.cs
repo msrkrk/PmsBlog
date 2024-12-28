@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account
 {

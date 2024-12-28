@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PmsBlog.Areas.Blog.Data;
-using PmsBlog.Areas.Identity.Data;
 
 namespace PmsBlog.Data;
 

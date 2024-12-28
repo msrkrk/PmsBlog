@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.Json;
 
-namespace PmsBlog.Areas.Blog.Data
+namespace PmsBlog.Data
 {
     public class Article
     {
-        public string Id { get; set; } = System.Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string Title { get; set; }
         public string Content { get; set; }

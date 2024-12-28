@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PmsBlog.Areas.Identity.Data;
+using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account.Manage
 {
