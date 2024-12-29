@@ -18,10 +18,12 @@ namespace PmsBlog.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<PmsBlogUser> _userManager;
+        private readonly PmsBlogContext _context;
 
-        public ConfirmEmailModel(UserManager<PmsBlogUser> userManager)
+        public ConfirmEmailModel(UserManager<PmsBlogUser> userManager, PmsBlogContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         /// <summary>
@@ -51,8 +53,11 @@ namespace PmsBlog.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 var eMail = user.Email.Split("@").First();
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", eMail));
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Url", eMail));
+                var dbUser= _context.Users.Find(user.Id);
+                dbUser.FullName = eMail;
+                dbUser.Url = eMail;
+                _context.SaveChanges();
+
             }
 
             return Page();

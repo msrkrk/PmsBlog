@@ -23,14 +23,12 @@ namespace PmsBlog.Controllers
             var article = _context.Articles
                 .Include(x=>x.ArticleTopics)
                 .ThenInclude(x => x.Topic)
+                .Include(x => x.Author)
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
             // article yoksa Home sayasına geri dön.
             if (article == null) return RedirectToAction("Index", "Home"); 
-            
-            var authorName = _context.UserClaims.FirstOrDefault(x => x.UserId == article.AuthorId && x.ClaimType == "FullName")?.ClaimValue;
-            
 
             var vm = new ArticleViewModel
             {
@@ -40,7 +38,7 @@ namespace PmsBlog.Controllers
                 AvgReadingMins = article.AvgReadingMins,
                 ReadingCount = article.ReadingCount,
                 CreatedDate = article.CreatedDate,
-                Author = authorName??"unknown",
+                Author = article.Author.FullName,
                 Topics = article.ArticleTopics.Select(x => x.Topic.Name).ToList()
             };
 

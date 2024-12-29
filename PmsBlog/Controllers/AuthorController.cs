@@ -22,15 +22,12 @@ namespace PmsBlog.Controllers
         [Route("[controller]/{url}")]
         public IActionResult Index([FromRoute] string url)
         {
-            var userId = _context.UserClaims.Where(x => x.ClaimType == "Url" && x.ClaimValue == url).Select(x => x.UserId).FirstOrDefault();
+            var user = _context.Users.Where(x => x.Url == url).FirstOrDefault();
 
-            if (userId == null)
+            if (user== null)
                 return Redirect("/Home/Index");
 
-
-            var fullName = _context.UserClaims.FirstOrDefault(x => x.ClaimType == "FullName")?.ClaimValue;
-            var description = _context.UserClaims.FirstOrDefault(x => x.ClaimType == "Description")?.ClaimValue;
-            var articles = _context.Articles.AsNoTracking().Include(x => x.ArticleTopics).ThenInclude(x => x.Topic).Where(x => x.AuthorId == userId).OrderByDescending(x => x.CreatedDate).ToList();
+            var articles = _context.Articles.AsNoTracking().Include(x => x.ArticleTopics).ThenInclude(x => x.Topic).Where(x => x.AuthorId == user.Id).OrderByDescending(x => x.CreatedDate).ToList();
 
             var articleViewModels = articles.Select(x => new ArticleViewModel
             {
@@ -40,15 +37,15 @@ namespace PmsBlog.Controllers
                 AvgReadingMins = x.AvgReadingMins,
                 ReadingCount = x.ReadingCount,
                 CreatedDate = x.CreatedDate,
-                Author = fullName ?? "unknown",
+                Author = user.FullName,
                 Topics = x.ArticleTopics.Select(x => x.Topic.Name).ToList()
             });
 
             var vm = new AuthorViewModel
             {
                 Url = url,
-                FullName = fullName,
-                Description = description,
+                FullName = user.FullName,
+                Description = user.Description,
                 Articles = articleViewModels.ToList()
             };
 

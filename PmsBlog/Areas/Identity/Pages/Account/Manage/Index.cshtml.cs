@@ -19,14 +19,16 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<PmsBlogUser> _userManager;
         private readonly SignInManager<PmsBlogUser> _signInManager;
-       
+        private readonly PmsBlogContext _context;
 
         public IndexModel(
             UserManager<PmsBlogUser> userManager,
-            SignInManager<PmsBlogUser> signInManager)
+            SignInManager<PmsBlogUser> signInManager,
+            PmsBlogContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -78,19 +80,21 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var claims = await _userManager.GetClaimsAsync(user);
-            var fullName = claims.FirstOrDefault(x=> x.Type == "FullName")?.Value;
-            var description = claims.FirstOrDefault(x => x.Type == "Description")?.Value;
-            var url = claims.FirstOrDefault(x => x.Type == "Url")?.Value;
+            var dbUser = await _context.Users.FindAsync(user.Id);
+           
+          
+            //var fullName = dbUser.FullName;
+            //var description = claims.FirstOrDefault(x => x.Type == "Description")?.Value;
+            //var url = claims.FirstOrDefault(x => x.Type == "Url")?.Value;
 
             Username = userName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                FullName = fullName,
-                Description = description,
-                Url = url
+                FullName = user.FullName,
+                Description = user.Description,
+                Url = user.Url
             };
         }
 
@@ -131,62 +135,26 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var claims = await _userManager.GetClaimsAsync(user);
-            var fullNameClaim = claims.FirstOrDefault(x => x.Type == "FullName");
-            var fullName = fullNameClaim?.Value;
-            if (Input.FullName != fullName)
+            if (Input.FullName != user.FullName)
             {
-                if(fullNameClaim is not null)
-                {
-                    await _userManager.RemoveClaimAsync(user, fullNameClaim);
-                }
-               
-                var setFullNameResult = await _userManager.AddClaimAsync(user, new Claim("FullName",Input.FullName));
-
-                if (!setFullNameResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set fullname.";
-                    return RedirectToPage();
-                }
+                var dbUser = await _context.Users.FindAsync(user.Id);
+                dbUser.FullName = Input.FullName;
+                await _context.SaveChangesAsync();
             }
 
-            var descriptionClaim = claims.FirstOrDefault(x => x.Type == "Description");
-            var description = descriptionClaim?.Value;
-            if (Input.Description != description)
+            if (Input.Description != user.Description)
             {
-                if(descriptionClaim != null)
-                {
-                    await _userManager.RemoveClaimAsync(user, descriptionClaim);
-                }
-                var setDescriptionResult = await _userManager.AddClaimAsync(user, new Claim("Description", Input.Description));
-
-                if (!setDescriptionResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set description.";
-                    return RedirectToPage();
-                }
+                var dbUser = await _context.Users.FindAsync(user.Id);
+                dbUser.Description = Input.Description;
+                await _context.SaveChangesAsync();
             }
 
-            
-            var urlClaim = claims.FirstOrDefault(x => x.Type == "Url");
-            var url = urlClaim?.Value;
-            if (Input.Url != url)
+            if(Input.Url != user.Url)
             {
-                if (urlClaim is not null)
-                {
-                    await _userManager.RemoveClaimAsync(user, urlClaim);
-                }
-
-                var setUrlResult = await _userManager.AddClaimAsync(user, new Claim("Url", Input.Url));
-
-                if (!setUrlResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set URL.";
-                    return RedirectToPage();
-                }
+                var dbUser = await _context.Users.FindAsync(user.Id);
+                dbUser.Url = Input.Url;
+                await _context.SaveChangesAsync();
             }
-
-
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

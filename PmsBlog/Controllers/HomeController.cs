@@ -41,7 +41,8 @@ namespace PmsBlog.Controllers
                 AvgReadingMins = x.AvgReadingMins,
                 ReadingCount = x.ReadingCount,
                 CreatedDate = x.CreatedDate,
-                Author = x.Author.UserName ?? "unknown",
+                Author = x.Author.FullName,
+                AuthorUrl = x.Author.Url,
                 Topics = x.ArticleTopics.Select(x => x.Topic.Name).ToList()
             });
 

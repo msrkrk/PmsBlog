@@ -8,6 +8,7 @@ namespace PmsBlog.Models.Article
         public string Title { get; set; }
         public string Content { get; set; }
         public string Author { get; set; }
+        public string AuthorUrl { get; set; }
         public DateTime CreatedDate { get; set; }
         public List<string> Topics { get; set; }
         public int AvgReadingMins { get; set; }
