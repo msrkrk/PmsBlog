@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PmsBlog.Data
+@using PmsBlog.Models.Topic
+@model List<TopicViewModel>
+
+@inject SignInManager<PmsBlogUser> SignInManager
+
+@{
+    ViewData["Title"] = "Konular";
+}
+
+@foreach (var item in Model)
+{
+    <div>
+        <p>@item.Name</p>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div>
+                @if (item.IsUserSuscribing)
+                {
+                    <form asp-controller="Topic" asp-action="UnSubscribe" method="post">
+
+                        <input type="hidden" name="topicId" value="@item.Id"/>
+
+                        <button type="submit">Takipten Çık</button>
+
+                    </form>
+                }
+                else
+                {
+                     <form asp-controller="Topic" asp-action="Subscribe" method="post">
+
+                        <input type="hidden" name="topicId" value="@item.Id"/>
+
+                        <button type="submit"> Takip Et </button>
+
+                    </form>
+                }
+            </div>
+        }
+    </div>
+}
