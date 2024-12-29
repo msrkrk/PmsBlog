@@ -21,7 +21,6 @@ namespace PmsBlog.Controllers
         public IActionResult Index([FromRoute] string id)
         {
             var article = _context.Articles
-                .AsNoTracking()
                 .Include(x=>x.ArticleTopics)
                 .ThenInclude(x => x.Topic)
                 .Where(x => x.Id == id)
@@ -45,7 +44,8 @@ namespace PmsBlog.Controllers
                 Topics = article.ArticleTopics.Select(x => x.Topic.Name).ToList()
             };
 
-
+            article.ReadingCount++; 
+            _context.SaveChanges();
             return View(vm);
         }
 

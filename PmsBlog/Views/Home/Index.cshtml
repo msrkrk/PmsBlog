@@ -1,8 +1,41 @@
-﻿@{
+﻿@using PmsBlog.Models.Home
+@model HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <h1>PmsBlog’a Hoş Geldiniz!</h1>
+
+    <p> PmsBlog, teknoloji, yazılım geliştirme ve proje yönetimi gibi alanlarda bilgi paylaşımı yapmak ve bireylerin bu konularda kendini geliştirmesine destek olmak amacıyla kuruldu. Burada hem ilham alabileceğiniz hem de öğrendiklerinizi uygulayabileceğiniz içeriklerle dolu bir dünya sizi bekliyor!</p>
+    <p>   Eğer siz de yazılarınızı paylaşarak bilgi ve deneyimlerinizi başkalarına aktarmak istiyorsanız, sağ üst köşede yer alan Üye Ol butonuna tıklayarak hemen aramıza katılabilirsiniz. Üye olduktan sonra kendi makalelerinizi yazabilir, düşüncelerinizi geniş bir kitleyle paylaşabilir ve blog topluluğumuzun bir parçası olabilirsiniz.</p>
+    <p>Haydi, hemen üye olun ve PmsBlog’un bilgi dolu dünyasında yerinizi alın! 🚀 Daha fazla bilgi için <a href="/Home/AboutUs">tıklayın</a></p>
+    
+
+
+    <h2>En Çok Okunanlar</h2>
+
+    @foreach (var item in Model.TopReads)
+    {
+        <div>
+            <h1>@item.Title</h1>
+
+
+            <p>@item.Content</p>
+            <p>@item.Author</p>
+            <p>@item.CreatedDate</p>
+
+            <ul>
+
+                @foreach (var topic in item.Topics)
+                {
+                    <li>@topic</li>
+                }
+
+            </ul>
+
+        </div>
+    }
+   
 </div>
