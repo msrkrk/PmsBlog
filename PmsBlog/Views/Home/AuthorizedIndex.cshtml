@@ -1,8 +1,41 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using PmsBlog.Models.Home
+@model AuthorizedHomeViewModel
+
+@if(Model.SubscribedTopics.Count == 0)
+{
+    <p>Henüz hiçbir konuyu takip etmiyorsunuz. Konular sayfasından ilginizi çeken konuları takip edebilirsiniz.<a href="/Topic">Konulara Git.</a></p>
+}
+else
+{
+    <h2>Takip Ettikleriniz</h2>
+    @foreach (var item in Model.SubscribedTopics)
+    {
+        <div>
+            <p>@item.Name</p>
+        </div>
+    }
+
+<p>Değişiklik yapmak için <a href="/Topic">Konulara Git.</a></p>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Authorized</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@foreach (var item in Model.Articles)
+{
+    <div>
+        <h1>@item.Title</h1>
+
+
+        <p>@item.Content</p>
+        <p><a href="/Author/@item.AuthorUrl">@item.Author</a></p>
+        <p>@item.CreatedDate</p>
+
+        <ul>
+
+            @foreach (var topic in item.Topics)
+            {
+                <li>@topic</li>
+            }
+
+        </ul>
+
+    </div>
+}
