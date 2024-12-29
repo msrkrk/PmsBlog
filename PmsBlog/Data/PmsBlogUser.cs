@@ -11,9 +11,9 @@ namespace PmsBlog.Data;
 public class PmsBlogUser : IdentityUser
 {
     public List<UserTopic> UserTopics { get; set; }
-
     public string? FullName { get; set; }
     public string? Description { get; set; }
     public string? Url { get; set; }
+    public string? ProfilePictureBase64 { get; set; }
 }
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using PmsBlog.Data;
 
 namespace PmsBlog.Areas.Identity.Pages.Account.Manage
@@ -36,6 +37,7 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string Username { get; set; }
+        public string ImageBase64 { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -74,6 +76,9 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
             [Display(Name = "URL")]
             public string Url { get; set; }
 
+            [BindProperty]
+            public IFormFile ImageFile { get; set; }
+
         }
 
         private async Task LoadAsync(PmsBlogUser user)
@@ -81,13 +86,9 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var dbUser = await _context.Users.FindAsync(user.Id);
-           
-          
-            //var fullName = dbUser.FullName;
-            //var description = claims.FirstOrDefault(x => x.Type == "Description")?.Value;
-            //var url = claims.FirstOrDefault(x => x.Type == "Url")?.Value;
 
             Username = userName;
+            ImageBase64 = user.ProfilePictureBase64;
 
             Input = new InputModel
             {
@@ -95,6 +96,7 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
                 FullName = user.FullName,
                 Description = user.Description,
                 Url = user.Url
+                
             };
         }
 
@@ -154,6 +156,18 @@ namespace PmsBlog.Areas.Identity.Pages.Account.Manage
                 var dbUser = await _context.Users.FindAsync(user.Id);
                 dbUser.Url = Input.Url;
                 await _context.SaveChangesAsync();
+            }
+
+            if(Input.ImageFile != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    var dbUser = await _context.Users.FindAsync(user.Id);
+                    await Input.ImageFile.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+                    dbUser.ProfilePictureBase64 = Convert.ToBase64String(fileBytes);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             await _signInManager.RefreshSignInAsync(user);
