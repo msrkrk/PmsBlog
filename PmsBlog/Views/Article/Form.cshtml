@@ -12,9 +12,29 @@
     </div>
 
     <div class="form-floating mb-3">
-        <input asp-for="@Model.Content" class="form-control" aria-required="true" placeholder="Your article content" />
+        <textarea asp-for="@Model.Content" class="form-control" aria-required="true" placeholder="Your article content" style="min-height: 150px"></textarea>
         <label asp-for="@Model.Content">Content</label>
         <span asp-validation-for="@Model.Content" class="text-danger"></span>
     </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="@Model.AvgReadingMins" class="form-control" aria-required="true" placeholder="Your article avarage reading minutes" type="number" />
+        <label asp-for="@Model.AvgReadingMins">AvgReadingMins</label>
+        <span asp-validation-for="@Model.AvgReadingMins" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <select multiple asp-for="@Model.SelectedTopicIds" class="form-control" aria-required="true" placeholder="Your article avarage reading minutes" style="min-height:150px">
+            @foreach (var topic in Model.Topics)
+            {
+                <option value="@topic.Id">@topic.Name</option>
+            }
+        </select>
+        <label asp-for="@Model.SelectedTopicIds">Topic</label>
+        <span asp-validation-for="@Model.SelectedTopicIds" class="text-danger"></span>
+    </div>
+
+
+
     <button id="articleSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
 </form>

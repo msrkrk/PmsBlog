@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PmsBlog.Data;
 using PmsBlog.Models.Article;
+using System.Security.Claims;
 
 namespace PmsBlog.Controllers
 {
@@ -48,9 +49,22 @@ namespace PmsBlog.Controllers
             return View(vm);
         }
 
+
+        [Route("[controller]/Form/New")]
+        [Authorize]
+        public IActionResult Form()
+        {
+            var vm = new ArticleFormViewModel();
+
+            var topics = _context.Topics.AsNoTracking().ToList();
+            vm.Topics = topics;
+
+            return View(vm);
+        }
+
         [Route("[controller]/Form/{id}")]
         [Authorize]
-        public IActionResult Form([FromRoute] string? id)
+        public IActionResult Form([FromRoute] string id)
         {
             var vm = new ArticleFormViewModel
             {
@@ -84,7 +98,10 @@ namespace PmsBlog.Controllers
         [Authorize]
         public IActionResult Save([FromForm] ArticleFormViewModel vm)
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")!.Value;
+            var topics = _context.Topics.AsNoTracking().ToList();
+            vm.Topics = topics;
+
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value;
 
             if (ModelState.IsValid)
             {
@@ -100,20 +117,31 @@ namespace PmsBlog.Controllers
                 if (vm.Id == null)
                 {
                     _context.Articles.Add(article);
+
                 }
                 else
                 {
                     _context.Articles.Update(article);
+                    var articleTopics = _context.ArticleTopics.Where(x => x.ArticleId == article.Id).ToList();
+                    _context.ArticleTopics.RemoveRange(articleTopics);
+                   
                 }
+
+                var newArticleTopics = vm.SelectedTopicIds.Select(x => new ArticleTopic
+                {
+                    TopicId = x,
+                    ArticleId = article.Id
+                });
+                _context.ArticleTopics.AddRange(newArticleTopics);
 
                 _context.SaveChanges();
 
                 vm.Id = article.Id;
 
-                return View("Form", vm);
+                return RedirectToAction("Index", new {Id=vm.Id});
             }
 
-            return View("Form", vm);
+            return RedirectToAction("Index", new { Id = vm.Id });
         }
     }
 }

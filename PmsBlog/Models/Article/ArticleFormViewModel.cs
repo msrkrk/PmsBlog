@@ -10,6 +10,6 @@ namespace PmsBlog.Models.Article
         public string Content { get; set; }
         public List<string> SelectedTopicIds { get; set; }
         public int AvgReadingMins { get; set; }
-        public List<Topic> Topics { get; set; }
+        public List<Topic>? Topics { get; set; }
     }
 }

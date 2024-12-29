@@ -1,7 +1,33 @@
 ﻿@model AuthorViewModel
 
-<p>YAZAR SAYFASI:
+<p>
+    YAZAR SAYFASI:
     <div>url: @Model.Url</div>
-    <div>Fullname: @Model.FullName</div> 
+    <div>Fullname: @Model.FullName</div>
     <div>Description: @Model.Description</div>
 </p>
+
+
+<h1>MAKALELER</h1>
+
+@foreach (var item in Model.Articles)
+{
+    <div>
+        <h1>@item.Title</h1>
+
+
+        <p>@item.Content</p>
+        <p>@item.Author</p>
+        <p>@item.CreatedDate</p>
+
+        <ul>
+
+            @foreach (var topic in item.Topics)
+            {
+                <li>@topic</li>
+            }
+
+        </ul>
+
+    </div>
+}
