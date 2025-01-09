@@ -1,24 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using PmsBlog.Data
 
-@inject SignInManager<PmsBlogUser> SignInManager
-@inject UserManager<PmsBlogUser> UserManager
+@inject SignInManager<PmsBlogUser> signInManager
+@inject UserManager<PmsBlogUser> userManager
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (signInManager.IsSignedIn(User))
     {
-
-        var url = User.Claims.FirstOrDefault(x => x.Type == "Url")?.Value;
+        var user = userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
 
 
         <li class="nav-item">
             <a id="newArticle" class="nav-link text-dark" href="/Article/Form/New" title="Manage">Yeni Makale</a>
         </li>
         <li class="nav-item">
-            <a id="author" class="nav-link text-dark" href="/Author/@url" title="Manage">Yazar Sayfam</a>
+            <a id="author" class="nav-link text-dark" href="/Author/@user.Url" title="Manage">Yazar Sayfam</a>
         </li>
         <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userManager.GetUserName(User)!</a>
         </li>
         <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

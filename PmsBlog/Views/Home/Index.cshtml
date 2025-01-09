@@ -13,13 +13,20 @@
     <p>Haydi, hemen üye olun ve PmsBlog’un bilgi dolu dünyasında yerinizi alın! 🚀 Daha fazla bilgi için <a href="/Home/AboutUs">tıklayın</a></p>
     
 
+    <hr />
 
-    <h2>En Çok Okunanlar</h2>
+    <hr />
+
+    <h1>En Çok Okunanlar</h1>
+
+    <hr />
+
+    <hr />
 
     @foreach (var item in Model.TopReads)
     {
         <div>
-            <h1>@item.Title</h1>
+            <h2>@item.Title</h2>
 
 
             <p>@item.Content</p>
@@ -36,6 +43,9 @@
             </ul>
 
         </div>
+
+
+        <hr />
     }
    
 </div>

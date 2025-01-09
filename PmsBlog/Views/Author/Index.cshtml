@@ -1,15 +1,20 @@
 ﻿@model AuthorViewModel
 
 <p>
-    YAZAR SAYFASI:
-    <div>url: @Model.Url</div>
-    <div>Fullname: @Model.FullName</div>
-    <div>Description: @Model.Description</div>
+    <h1>YAZAR SAYFASI</h1>
+    <div><h6>url: @Model.Url</h6></div>
+    <div><h6>Fullname: @Model.FullName</h6></div>
+    <div><h6>Description: @Model.Description</h6></div>
 </p>
 
 
+<hr />
+
+<hr />
+
 <h1>MAKALELER</h1>
 
+<hr />
 @foreach (var item in Model.Articles)
 {
     <div>
@@ -29,4 +34,5 @@
         </ul>
 
     </div>
+    <hr />
 }

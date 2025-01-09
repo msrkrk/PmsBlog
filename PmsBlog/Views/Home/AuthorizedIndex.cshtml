@@ -1,7 +1,7 @@
 ﻿@using PmsBlog.Models.Home
 @model AuthorizedHomeViewModel
 
-@if(Model.SubscribedTopics.Count == 0)
+@if (Model.SubscribedTopics.Count == 0)
 {
     <p>Henüz hiçbir konuyu takip etmiyorsunuz. Konular sayfasından ilginizi çeken konuları takip edebilirsiniz.<a href="/Topic">Konulara Git.</a></p>
 }
@@ -15,8 +15,11 @@ else
         </div>
     }
 
-<p>Değişiklik yapmak için <a href="/Topic">Konulara Git.</a></p>
+    <p>Değişiklik yapmak için <a href="/Topic">Konulara Git.</a></p>
 }
+<hr />
+
+<hr />
 
 @foreach (var item in Model.Articles)
 {
@@ -38,4 +41,5 @@ else
         </ul>
 
     </div>
+    <hr />
 }
